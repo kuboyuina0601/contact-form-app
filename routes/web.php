@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// 仮ルート
+Route::middleware('auth')->group(function () {
+    Route::get('/admin', fn() => 'お問い合わせ一覧（準備中）')->name('admin.index');
+});
