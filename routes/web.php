@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// 仮ルート
+
 Route::middleware('auth')->group(function () {
-    Route::get('/admin', fn() => 'お問い合わせ一覧（準備中）')->name('admin.index');
+    // 仮ルート(admincontroller作成時まで)
+    Route::get('/admin', function () {
+        return view('admin.index', [
+            'categories' => [],
+            'tags' => \App\Models\Tag::all(),
+            'contacts' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10), // お問い合わせ一覧の空データ
+        ]);
+    })->name('admin.index');
+    //タグCRUDルート
+    Route::resource('admin/tags',TagController::class)
+    ->only(['store', 'edit', 'update', 'destroy'])
+    ->names('admin.tags');
 });
