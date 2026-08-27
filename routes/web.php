@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,14 +22,14 @@ Route::post('/contacts', [ContactController::class, 'store'])->name('contact.sto
 Route::get('/thanks', [ContactController::class, 'thanks'])->name('contact.thanks');
 
 Route::middleware('auth')->group(function () {
-    // 仮ルート(admincontroller作成時まで)
-    Route::get('/admin', function () {
-        return view('admin.index', [
-            'categories' => [],
-            'tags' => \App\Models\Tag::all(),
-            'contacts' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10), // お問い合わせ一覧の空データ
-        ]);
-    })->name('admin.index');
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    //エクスポート
+    Route::get('/contacts/export', [AdminController::class, 'export'])->name('admin.export');
+
+    // お問い合わせ詳細・削除
+    Route::get('/admin/contacts/{contact}', [AdminController::class, 'show'])->name('admin.show');
+    Route::delete('/admin/contacts/{contact}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
     //タグCRUDルート
     Route::resource('admin/tags',TagController::class)
     ->only(['store', 'edit', 'update', 'destroy'])
