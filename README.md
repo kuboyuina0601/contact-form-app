@@ -44,106 +44,62 @@ Laravelを用いて作成したお問い合わせ管理Webアプリケーショ�
 ## 環境構築手順
 動作確認の際は、以下の手順でローカル環境の構築を行ってください。
 
-1. Laravel 10.x プロジェクトの新規作成
+1. リポジトリからダウンロード
 ```bash
-docker run --rm \
-  -u "$(id -u):$(id -g)" \
-  -v "$(pwd):/var/www/html" \
-  -w /var/www/html \
-  -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
-  laravelsail/php82-composer:latest \
-  composer create-project laravel/laravel:^10.0 contact-form-app
+git clone git@github.com:kuboyuina0601/contact-form-app.git
+cd contact-form-app
 ```
-
-2. プロジェクトディレクトリへの移動と Sail のインストール
+2. 環境変数を設定
 ```bash
- cd contact-form-app
-
-  # Laravel Sail のインストール
-  docker run --rm \
-  -u "$(id -u):$(id -g)" \
-  -v "$(pwd):/var/www/html" \
-  -w /var/www/html \
-  -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
-  laravelsail/php82-composer:latest \
-  composer require laravel/sail --dev
-
-  # MySQL構成でSail設定をパブリッシュ
-  docker run --rm \
-  -u "$(id -u):$(id -g)" \
-  -v "$(pwd):/var/www/html" \
-  -w /var/www/html \
-  -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
-  laravelsail/php82-composer:latest \
-  php artisan sail:install --with=mysql
-
-  ※Apple Silicon（M1/M2/M3）Macをお使いの場合:
-  compose.yaml 内の mysql サービスに以下を追加してください。
-  mysql:
-  image: 'mysql/mysql-server:8.0'
-  platform: 'linux/amd64'
+cp .env.example .env
 ```
 3. 環境変数（.env）の調整
+.env ファイルを開き、データベース接続情報が以下になっているか確認・修正します。
 ```bash
-  .env ファイルを開き、データベース接続情報が以下になっているか確認・修正します。
-  DB_CONNECTION=mysql
-  DB_HOST=mysql
-  DB_PORT=3306
-  DB_DATABASE=laravel
-  DB_USERNAME=sail
-  DB_PASSWORD=password
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 ```
-4. フロントエンド環境のセットアップ（Tailwind CSS & Alpine.js）
+4. Laravel Sailのインストール
 ```bash
-  # Sailコンテナの起動
-  ./vendor/bin/sail up -d
+docker run --rm \
+-u "$(id -u):$(id -g)" \
+-v "$(pwd):/var/www/html" \
+-w /var/www/html \
+-e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+laravelsail/php82-composer:latest \
+composer require laravel/sail --dev
+```
+5. Dockerコンテナの起動
+```bash
+sail up -d
+```
+6. アプリケーションキー生成とマイグレーション&シーディングの実行
+```bash
+sail artisan key:generate
+sail artisan migrate:fresh --seed
+#テストアカウント-シーディングで登録される以下のユーザーをご利用ください
+名前：Test User
+メールアドレス：test@example.com
+パスワード：password
 
-  # 依存パッケージのインストール
-  sail npm install
-　sail npm install -D tailwindcss@^3.4.0 postcss autoprefixer
-　sail npm install alpinejs
-
-　# Tailwind設定ファイルの生成
-　sail npx tailwindcss init -p
-
-　tailwind.config.js の content 配列に以下を設定します。
-　content: [
-  "./resources/**/*.blade.php",
-  "./resources/**/*.js",
-  "./resources/**/*.vue",
-  ],
 ```
-
-5. phpMyAdmin の追加設定
+7. フロントエンド用パッケージのインストールと開発サーバの起動
 ```bash
-　compose.yaml の services セクション内に以下を追加します。
-　phpmyadmin:
-  　image: 'phpmyadmin:latest'
-  　ports:
-    　- '${FORWARD_PHPMYADMIN_PORT:-8080}:80'
-  　environment:
-    　PMA_HOST: mysql
-    　PMA_USER: '${DB_USERNAME}'
-    　PMA_PASSWORD: '${DB_PASSWORD}'
-  　networks:
-    　- sail
-  　depends_on:
-    　- mysql
+sail npm install
+sail npm run dev
 ```
-6. アプリキー生成と DB マイグレーション
+8. テストプログラムの実行
 ```bash
-　sail artisan key:generate
-　sail artisan migrate:fresh --seed
+sail artisan test
 ```
-7. 動作確認・サーバー起動
-```bash
-　# Vite開発サーバーの起動
-　sail npm run dev
-　# テストの実行
-　sail artisan test
-```
-　Webサイト: http://localhost/
-　phpMyAdmin: http://localhost:8080/
+Webサイト: http://localhost/</br>
+phpMyAdmin: http://localhost:8080/</br>
+お問合せフォーム：http://localhost/</br>
+管理画面：http://localhost/admin/
 
 ## データベース設計（ER図）
 ```mermaid
