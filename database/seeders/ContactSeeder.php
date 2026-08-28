@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
@@ -13,15 +14,22 @@ class ContactSeeder extends Seeder
      */
     public function run(): void
     {
-        // 問い合わせダミーデータを20件投入し、各問い合わせに既存のカテゴリからランダムに1~3つのIDを割り当てる
+        // 1. ループ外で1回だけ全データ（ID）を取得（クエリ発行は2回のみ）
+        $categoryIds = Category::pluck('id');
+        $tags = Tag::all();
+
+        // 2. 問い合わせダミーデータを20件作成
         Contact::factory()
             ->count(20)
+            ->state(fn () => [
+                'category_id' => $categoryIds->random(),
+            ])
             ->create()
-            ->each(function ($contact) {
-                // 既存のタグからランダムに1〜3件のIDを取得
-                $tagIds = Tag::inRandomOrder()->take(rand(1, 3))->pluck('id');
-                // 中間テーブルに紐付け
-                $contact->tags()->attach($tagIds);
+            ->each(function ($contact) use ($tags) {
+                // メモリ上の $tags から抽出して attach（DBへの検索クエリは発生しない）
+                $contact->tags()->attach(
+                    $tags->random(rand(1, 3))->pluck('id')
+                );
             });
     }
 }
