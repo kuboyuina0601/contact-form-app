@@ -13,6 +13,7 @@ class ContactManagementTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Category $category;
 
     protected function setUp(): void
@@ -27,7 +28,7 @@ class ContactManagementTest extends TestCase
     {
         Contact::factory()->count(15)->create([
             'category_id' => $this->category->id,
-            'first_name'  => '検索テスト名',
+            'first_name' => '検索テスト名',
         ]);
 
         $response = $this->actingAs($this->user)->get('/admin?keyword=検索テスト');
@@ -67,17 +68,17 @@ class ContactManagementTest extends TestCase
     {
         Contact::factory()->create([
             'category_id' => $this->category->id,
-            'first_name'  => 'エクスポート対象者',
-            'gender'      => 1,
+            'first_name' => 'エクスポート対象者',
+            'gender' => 1,
         ]);
 
         $queryParams = [
-            'keyword'     => 'エクスポート',
-            'gender'      => 1,
+            'keyword' => 'エクスポート',
+            'gender' => 1,
             'category_id' => $this->category->id,
         ];
 
-        $response = $this->actingAs($this->user)->get('/contacts/export?' . http_build_query($queryParams));
+        $response = $this->actingAs($this->user)->get('/contacts/export?'.http_build_query($queryParams));
 
         $response->assertStatus(200);
         $response->assertHeader('content-type', 'text/csv; charset=UTF-8');

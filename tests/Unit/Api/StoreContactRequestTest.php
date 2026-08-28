@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Api;
 
-use Tests\TestCase;
 use App\Http\Requests\Api\V1\StoreContactRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 class StoreContactRequestTest extends TestCase
 {
@@ -18,7 +18,7 @@ class StoreContactRequestTest extends TestCase
     {
         parent::setUp();
         $this->seed(DatabaseSeeder::class);
-        $this->request = new StoreContactRequest();
+        $this->request = new StoreContactRequest;
     }
 
     /** @test */

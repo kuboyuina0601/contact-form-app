@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contact;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -35,7 +35,7 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
-    //エクスポート
+    // エクスポート
     public function export(Request $request)
     {
         // 検索条件に一致するデータを全件取得
@@ -48,7 +48,7 @@ class AdminController extends Controller
         // レスポンスヘッダーの設定
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="contacts_' . date('Ymd_His') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="contacts_'.date('Ymd_His').'.csv"',
         ];
 
         // ストリーム出力でCSVを生成
@@ -64,7 +64,7 @@ class AdminController extends Controller
             // データ行の書き込み
             foreach ($contacts as $contact) {
                 fputcsv($stream, [
-                    $contact->first_name . ' ' . $contact->last_name,
+                    $contact->first_name.' '.$contact->last_name,
                     $genderLabels[$contact->gender] ?? '',
                     $contact->email,
                     $contact->category->content ?? '',

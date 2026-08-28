@@ -14,6 +14,7 @@ class StoreContactRequestTest extends TestCase
     use RefreshDatabase;
 
     private Category $category;
+
     private Tag $tag;
 
     protected function setUp(): void
@@ -33,17 +34,17 @@ class StoreContactRequestTest extends TestCase
     public function test_contact_validation_passes_at_boundary_phone_length(): void
     {
         $data = [
-            'first_name'  => '山田',
-            'last_name'   => '太郎',
-            'gender'      => 1,
-            'email'       => 'test@example.com',
-            'tel'         => '0312345678', 
-            'address'     => '東京都渋谷区1-1',
-            'detail'      => 'お問い合わせ内容です。',
+            'first_name' => '山田',
+            'last_name' => '太郎',
+            'gender' => 1,
+            'email' => 'test@example.com',
+            'tel' => '0312345678',
+            'address' => '東京都渋谷区1-1',
+            'detail' => 'お問い合わせ内容です。',
             'category_id' => $this->category->id,
         ];
 
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());

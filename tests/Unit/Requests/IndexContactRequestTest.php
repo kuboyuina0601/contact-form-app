@@ -30,13 +30,13 @@ class IndexContactRequestTest extends TestCase
     public function test_index_contact_validation_passes_with_valid_filters(): void
     {
         $data = [
-            'keyword'     => 'テスト',
-            'gender'      => 1,
+            'keyword' => 'テスト',
+            'gender' => 1,
             'category_id' => $this->category->id,
-            'date'        => '2026-01-01',
+            'date' => '2026-01-01',
         ];
 
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -46,11 +46,11 @@ class IndexContactRequestTest extends TestCase
     public function test_index_contact_validation_fails_with_invalid_gender_or_category(): void
     {
         $data = [
-            'gender'      => 99,
+            'gender' => 99,
             'category_id' => 99999,
         ];
 
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -61,7 +61,7 @@ class IndexContactRequestTest extends TestCase
     {
         $data = ['keyword' => str_repeat('a', 255)];
 
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -72,7 +72,7 @@ class IndexContactRequestTest extends TestCase
     {
         $data = ['keyword' => str_repeat('a', 256)];
 
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

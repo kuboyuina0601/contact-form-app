@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Api;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\Contact;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Tag;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ContactApiTest extends TestCase
 {
@@ -28,7 +28,7 @@ class ContactApiTest extends TestCase
             ->assertJsonStructure([
                 'data',
                 'links',
-                'meta' => ['current_page', 'last_page', 'per_page', 'total']
+                'meta' => ['current_page', 'last_page', 'per_page', 'total'],
             ]);
     }
 
@@ -59,16 +59,16 @@ class ContactApiTest extends TestCase
         $tag = Tag::first();
 
         $data = [
-            'first_name'  => 'テスト',
-            'last_name'   => '太郎',
-            'gender'      => 1,
-            'email'       => 'api_spec_test@example.com',
-            'tel'         => '09012345678',
-            'address'     => '東京都新宿区1-1-1',
-            'building'    => 'テストビル',
+            'first_name' => 'テスト',
+            'last_name' => '太郎',
+            'gender' => 1,
+            'email' => 'api_spec_test@example.com',
+            'tel' => '09012345678',
+            'address' => '東京都新宿区1-1-1',
+            'building' => 'テストビル',
             'category_id' => $category->id,
-            'detail'      => '新規お問い合わせテスト',
-            'tag_ids'     => [$tag->id],
+            'detail' => '新規お問い合わせテスト',
+            'tag_ids' => [$tag->id],
         ];
 
         $response = $this->postJson('/api/v1/contacts', $data);
@@ -97,15 +97,15 @@ class ContactApiTest extends TestCase
         $tag = Tag::first();
 
         $updateData = [
-            'first_name'  => '更新名',
-            'last_name'   => '更新姓',
-            'gender'      => 2,
-            'email'       => 'api_update_spec@example.com',
-            'tel'         => '08098765432',
-            'address'     => '大阪府大阪市1-1-1',
+            'first_name' => '更新名',
+            'last_name' => '更新姓',
+            'gender' => 2,
+            'email' => 'api_update_spec@example.com',
+            'tel' => '08098765432',
+            'address' => '大阪府大阪市1-1-1',
             'category_id' => $category->id,
-            'detail'      => '更新問い合わせテスト',
-            'tag_ids'     => [$tag->id],
+            'detail' => '更新問い合わせテスト',
+            'tag_ids' => [$tag->id],
         ];
 
         $response = $this->putJson("/api/v1/contacts/{$contact->id}", $updateData);
@@ -114,7 +114,7 @@ class ContactApiTest extends TestCase
             ->assertJsonPath('data.email', 'api_update_spec@example.com');
 
         $this->assertDatabaseHas('contacts', [
-            'id'    => $contact->id,
+            'id' => $contact->id,
             'email' => 'api_update_spec@example.com',
         ]);
     }

@@ -30,7 +30,7 @@ class UpdateTagRequestTest extends TestCase
     private function createRequest(string $url, string $method, array $data, int $tagId): UpdateTagRequest
     {
         $request = UpdateTagRequest::create($url, $method, $data);
-        
+
         $route = new Route($method, 'admin/tags/{tag}', []);
         $route->bind($request);
         $route->setParameter('tag', $tagId);

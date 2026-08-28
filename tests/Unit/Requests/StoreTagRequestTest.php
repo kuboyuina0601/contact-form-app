@@ -27,7 +27,7 @@ class StoreTagRequestTest extends TestCase
     {
         $data = ['name' => '新規タグ'];
 
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -38,7 +38,7 @@ class StoreTagRequestTest extends TestCase
     {
         $data = ['name' => '質問'];
 
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -50,7 +50,7 @@ class StoreTagRequestTest extends TestCase
     {
         $data = ['name' => str_repeat('a', 50)];
 
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -61,7 +61,7 @@ class StoreTagRequestTest extends TestCase
     {
         $data = ['name' => str_repeat('a', 51)];
 
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\TagController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +23,15 @@ Route::get('/thanks', [ContactController::class, 'thanks'])->name('contact.thank
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    //エクスポート
+    // エクスポート
     Route::get('/contacts/export', [AdminController::class, 'export'])->name('admin.export');
 
     // お問い合わせ詳細・削除
     Route::get('/admin/contacts/{contact}', [AdminController::class, 'show'])->name('admin.show');
     Route::delete('/admin/contacts/{contact}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
-    //タグCRUDルート
-    Route::resource('admin/tags',TagController::class)
-    ->only(['store', 'edit', 'update', 'destroy'])
-    ->names('admin.tags');
+    // タグCRUDルート
+    Route::resource('admin/tags', TagController::class)
+        ->only(['store', 'edit', 'update', 'destroy'])
+        ->names('admin.tags');
 });

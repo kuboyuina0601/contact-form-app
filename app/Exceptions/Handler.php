@@ -24,15 +24,13 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $this->reportable(function (Throwable $e) {});
 
         // APIリクエスト時の404エラー（ModelNotFound含む）を仕様書通りのJSONに変換
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'error' => 'お問い合わせが見つかりませんでした。'
+                    'error' => 'お問い合わせが見つかりませんでした。',
                 ], 404);
             }
         });
